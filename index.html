@@ -24,10 +24,8 @@
       radial-gradient(700px 500px at 8% 90%, #160a14 0%, transparent 60%),
       linear-gradient(#0c0810,#0a060d 55%,#0d0710);
   }
-  /* виньетка */
   body::before{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;
     background:radial-gradient(120% 92% at 50% 42%, transparent 52%, rgba(0,0,0,.6) 100%);}
-  /* плёночное зерно */
   body::after{content:"";position:fixed;inset:0;z-index:70;pointer-events:none;opacity:.055;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
@@ -93,15 +91,14 @@
   .details .rn{font-family:"Cormorant Unicase",serif;color:var(--gold);min-width:2.1em;text-align:right;letter-spacing:.08em}
   .details b{font-weight:400;font-style:italic;color:var(--bone)}
 
-  /* ── лилии и вино ── */
-  .figures{display:flex;align-items:flex-end;justify-content:center;gap:clamp(6px,3vw,28px);margin:30px auto 4px}
-  .lilwrap{line-height:0}
-  .mirror{transform:scaleX(-1)}
-  .lily{width:clamp(82px,19vw,126px);transform-origin:50% 100%;
-    animation:sway 7.5s ease-in-out infinite alternate;filter:drop-shadow(0 12px 18px rgba(0,0,0,.55))}
-  .mirror .lily{animation-delay:-3.7s}
-  .chalice{width:clamp(96px,22vw,142px);filter:drop-shadow(0 14px 22px rgba(0,0,0,.6))}
-  @keyframes sway{from{transform:rotate(-2deg)}to{transform:rotate(2.2deg)}}
+  /* ── композиция: лилии обвивают бокал ── */
+  .figures{margin:28px auto 2px}
+  .composition{width:clamp(230px,58vw,350px);display:block;margin:0 auto;
+    filter:drop-shadow(0 16px 26px rgba(0,0,0,.55))}
+  .bloomWrap{transform-box:fill-box;transform-origin:50% 88%;
+    animation:sway 7.5s ease-in-out infinite alternate}
+  .bw2{animation-delay:-3.7s}
+  @keyframes sway{from{transform:rotate(-1.8deg)}to{transform:rotate(1.8deg)}}
   .shine{animation:shimmer 5.5s ease-in-out infinite}
   @keyframes shimmer{0%,100%{opacity:.2}50%{opacity:.65}}
   .bubble{animation:bubble 4.2s ease-in infinite}
@@ -125,6 +122,9 @@
   .btn-yes{transform:scale(var(--s,1));filter:drop-shadow(0 4px 16px rgba(160,32,48,.45))}
   .btn-yes:hover{transform:translateY(-2px) scale(calc(var(--s,1)*1.03));
     filter:drop-shadow(0 6px 24px rgba(201,90,90,.55))}
+  /* «Нет» прыгает недалеко — плавный пружинящий шажок */
+  .btn-no{transition:filter .3s,transform .25s,
+    left .24s cubic-bezier(.3,1.5,.55,1), top .24s cubic-bezier(.3,1.5,.55,1)}
   .btn-no:hover::after{background:linear-gradient(180deg,#2c1820,#1a0e14)}
   .vanish{opacity:0!important;transform:scale(.15) rotate(30deg)!important;
     transition:opacity 1s,transform 1s!important}
@@ -133,6 +133,20 @@
   .hint.show{opacity:.95}
   .sig{margin-top:30px;font-family:"Marck Script",cursive;color:var(--gold-hi);
     font-size:1.3rem;line-height:1.55;text-shadow:0 0 16px rgba(240,217,152,.2)}
+
+  /* ── надписи над прежним местом кнопки ── */
+  .taunt{position:fixed;z-index:45;pointer-events:none;
+    width:max-content;max-width:220px;text-align:center;line-height:1.2;
+    font-family:"Marck Script",cursive;font-size:1.35rem;color:var(--gold-hi);
+    text-shadow:0 0 14px rgba(240,217,152,.35);opacity:0;
+    transform:translate(-50%,-50%);}
+  .taunt.pop{animation:tauntPop 2.4s ease forwards}
+  @keyframes tauntPop{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.5) rotate(-4deg)}
+    14%{opacity:1;transform:translate(-50%,-50%) scale(1.12) rotate(2deg)}
+    24%{transform:translate(-50%,-50%) scale(1) rotate(0deg)}
+    75%{opacity:1}
+    100%{opacity:0;transform:translate(-50%,-58%)}}
 
   /* ── финальная вуаль ── */
   .veil{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;
@@ -172,7 +186,7 @@
 </head>
 <body>
 
-<!-- ═══ Общие SVG-определения (градиенты, лепестки, орнаменты) ═══ -->
+<!-- ═══ Общие SVG-определения ═══ -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
   <defs>
     <path id="petalL" d="M0 0 C 16 -16 23 -52 11 -90 C 6 -105 -6 -105 -11 -90 C -23 -52 -16 -16 0 0 Z"/>
@@ -306,7 +320,7 @@
 
   <header>
     <div class="kicker">✦ &nbsp;приглашение&nbsp; ✦</div>
-    <p class="script">Найя…</p>
+    <p class="script">Найа…</p>
     <h1>Позвольте пригласить Вас в&nbsp;театр</h1>
   </header>
 
@@ -324,88 +338,73 @@
     <li><span class="rn">III</span><span>После — <b>вино при свечах и лунная прогулка</b></span></li>
   </ul>
 
-  <!-- ═══ Лилии и вино ═══ -->
+  <!-- ═══ Лилии, обвивающие бокал ═══ -->
   <div class="figures">
-    <div class="lilwrap">
-      <svg class="lily" viewBox="0 0 220 430" aria-hidden="true">
-        <circle cx="113" cy="150" r="96" fill="url(#gGlow)"/>
-        <path d="M112 430 C 104 356 118 300 112 236 C 109 208 111 186 113 164" fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
-        <path d="M113 252 C 94 236 80 214 76 190" fill="none" stroke="url(#gStem)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M76 190 C 64 176 62 156 72 142 C 84 152 88 172 76 190 Z" fill="url(#gPetalB)" stroke="#a98d5f" stroke-width="1"/>
-        <path d="M72 142 C 74 152 75 160 76 170" stroke="#8a713f" stroke-width="1" fill="none" opacity=".6"/>
-        <path d="M110 356 C 68 348 40 318 30 278 C 72 288 102 320 110 356 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
-        <path d="M33 282 C 58 304 86 332 108 352" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
-        <path d="M113 300 C 155 292 183 262 193 222 C 151 232 121 264 113 300 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
-        <path d="M190 226 C 165 248 137 274 115 296" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
-        <g transform="translate(113 152) rotate(-6)">
-          <g fill="url(#gPetalB)" stroke="#a3875a" stroke-width="1">
-            <use href="#petalL"/><use href="#petalL" transform="rotate(120)"/><use href="#petalL" transform="rotate(240)"/>
-          </g>
-          <g fill="url(#gPetal)" stroke="#c3a26b" stroke-width="1">
-            <use href="#petalL" transform="rotate(60) scale(.92)"/>
-            <use href="#petalL" transform="rotate(180) scale(.92)"/>
-            <use href="#petalL" transform="rotate(300) scale(.92)"/>
-          </g>
-          <g stroke="#9c4a55" stroke-width="1.3" opacity=".5" fill="none" stroke-linecap="round">
-            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(60)"/>
-            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(180)"/>
-            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(300)"/>
-          </g>
-          <circle r="10" fill="#ead9a8"/><circle r="4.5" fill="#7a1626"/>
-          <g stroke="#e6cf95" stroke-width="2.2" fill="none" stroke-linecap="round">
-            <path d="M0 0 C -8 -14 -17 -24 -27 -32"/><path d="M0 0 C -4 -16 -8 -30 -11 -42"/>
-            <path d="M0 0 C 1 -18 1 -34 -1 -48"/><path d="M0 0 C 6 -16 11 -28 15 -41"/>
-            <path d="M0 0 C 9 -13 19 -22 28 -30"/>
-          </g>
-          <g fill="#7a2030">
-            <ellipse cx="-28" cy="-34" rx="5" ry="2.7" transform="rotate(-50 -28 -34)"/>
-            <ellipse cx="-11.5" cy="-44" rx="5" ry="2.7" transform="rotate(-75 -11.5 -44)"/>
-            <ellipse cx="-1" cy="-50" rx="5" ry="2.7" transform="rotate(-90 -1 -50)"/>
-            <ellipse cx="16" cy="-43" rx="5" ry="2.7" transform="rotate(75 16 -43)"/>
-            <ellipse cx="29" cy="-32" rx="5" ry="2.7" transform="rotate(50 29 -32)"/>
-          </g>
-        </g>
-      </svg>
-    </div>
+    <svg class="composition" viewBox="0 0 400 430" aria-hidden="true">
+      <!-- сияние за цветами -->
+      <circle cx="86" cy="130" r="92" fill="url(#gGlow)"/>
+      <circle cx="314" cy="130" r="92" fill="url(#gGlow)"/>
 
-    <svg class="chalice" viewBox="0 0 200 250" aria-hidden="true">
-      <ellipse cx="100" cy="238" rx="62" ry="8" fill="#000" opacity=".5"/>
-      <path d="M40 44 C 40 102 64 136 100 140 C 136 136 160 102 160 44 Z" fill="url(#gGlass)" stroke="url(#gGold)" stroke-width="3"/>
-      <clipPath id="bowlClip"><path d="M43 47 C 43 100 66 132 100 136 C 134 132 157 100 157 47 Z"/></clipPath>
+      <!-- стебли (уходят за бокал, перекрещиваются у подножия) -->
+      <path d="M216 424 C 186 392 156 368 140 344 C 124 320 106 292 96 258 C 87 226 86 190 86 136"
+            fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
+      <path d="M184 424 C 214 392 244 368 260 344 C 276 320 294 292 304 258 C 313 226 314 190 314 136"
+            fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
+      <!-- внешние листья -->
+      <path d="M96 258 C 62 250 40 226 32 194 C 66 202 90 228 96 258 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+      <path d="M34 197 C 56 216 76 236 94 254" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+      <path d="M304 258 C 338 250 360 226 368 194 C 334 202 310 228 304 258 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+      <path d="M366 197 C 344 216 324 236 306 254" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+
+      <!-- холмик, укрывающий корни -->
+      <path d="M56 430 C 110 398 290 398 344 430 Z" fill="#150d14"/>
+      <path d="M56 430 C 110 398 290 398 344 430" fill="none" stroke="#2a1a22" stroke-width="1.5"/>
+      <!-- опавшие лепестки -->
+      <path d="M120 412 C 128 406 136 408 136 414 C 136 420 126 422 121 418 Z" fill="#e8d5ae" opacity=".8"/>
+      <path d="M262 416 C 270 411 278 414 277 420 C 276 425 266 426 262 421 Z" fill="#caa6a0" opacity=".7"/>
+
+      <ellipse cx="200" cy="344" rx="66" ry="9" fill="#000" opacity=".5"/>
+
+      <!-- ═ бокал ═ -->
+      <path d="M140 150 C 140 208 164 242 200 246 C 236 242 260 208 260 150 Z" fill="url(#gGlass)" stroke="url(#gGold)" stroke-width="3"/>
+      <clipPath id="bowlClip"><path d="M143 153 C 143 206 166 238 200 242 C 234 238 257 206 257 153 Z"/></clipPath>
       <g clip-path="url(#bowlClip)">
-        <rect x="40" y="86" width="120" height="60" fill="url(#gWine)"/>
-        <ellipse cx="100" cy="86" rx="58" ry="9" fill="#a3243c"/>
-        <ellipse cx="100" cy="85" rx="44" ry="6" fill="#c23350" opacity=".55"/>
-        <circle class="bubble" cx="88" cy="126" r="2.4" fill="#e8b7c0" opacity=".7"/>
-        <circle class="bubble b2" cx="106" cy="130" r="1.8" fill="#e8b7c0" opacity=".6"/>
-        <circle class="bubble b3" cx="118" cy="124" r="2.8" fill="#e8b7c0" opacity=".5"/>
-        <path class="shine" d="M60 62 C 62 94 72 116 86 126" stroke="rgba(255,238,204,.5)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <rect x="140" y="192" width="120" height="60" fill="url(#gWine)"/>
+        <ellipse cx="200" cy="192" rx="58" ry="9" fill="#a3243c"/>
+        <ellipse cx="200" cy="191" rx="44" ry="6" fill="#c23350" opacity=".55"/>
+        <circle class="bubble" cx="188" cy="228" r="2.4" fill="#e8b7c0" opacity=".7"/>
+        <circle class="bubble b2" cx="206" cy="232" r="1.8" fill="#e8b7c0" opacity=".6"/>
+        <circle class="bubble b3" cx="218" cy="226" r="2.8" fill="#e8b7c0" opacity=".5"/>
+        <path class="shine" d="M160 168 C 162 200 172 222 186 232" stroke="rgba(255,238,204,.5)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
       </g>
-      <ellipse cx="100" cy="44" rx="60" ry="11" fill="rgba(255,240,210,.05)" stroke="url(#gGold)" stroke-width="3"/>
-      <ellipse cx="100" cy="44" rx="54" ry="8.6" fill="none" stroke="#f4dd9a" stroke-width=".7" opacity=".5"/>
-      <path d="M92 140 C 94 158 96 168 100 176 C 104 168 106 158 108 140 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
-      <circle cx="100" cy="183" r="9" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
-      <circle cx="100" cy="183" r="3.1" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
-      <path d="M96 192 C 96 202 92 211 85 218 L115 218 C 108 211 104 202 104 192 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
-      <ellipse cx="100" cy="221" rx="47" ry="11" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1.4"/>
-      <ellipse cx="100" cy="218" rx="33" ry="6.6" fill="none" stroke="#f4dd9a" stroke-width=".8" opacity=".55"/>
-      <circle cx="100" cy="221" r="3.4" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
-      <circle cx="100" cy="120" r="4.2" fill="#7a1626" stroke="#f4dd9a" stroke-width=".8"/>
-      <path class="shine" d="M140 60 C 141 90 133 112 120 124" stroke="rgba(255,238,204,.22)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-    </svg>
+      <ellipse cx="200" cy="150" rx="60" ry="11" fill="rgba(255,240,210,.05)" stroke="url(#gGold)" stroke-width="3"/>
+      <ellipse cx="200" cy="150" rx="54" ry="8.6" fill="none" stroke="#f4dd9a" stroke-width=".7" opacity=".5"/>
+      <path d="M192 246 C 194 264 196 274 200 282 C 204 274 206 264 208 246 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <circle cx="200" cy="289" r="9" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <circle cx="200" cy="289" r="3.1" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
+      <path d="M196 298 C 196 308 192 317 185 324 L215 324 C 208 317 204 308 204 298 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <ellipse cx="200" cy="327" rx="47" ry="11" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1.4"/>
+      <ellipse cx="200" cy="324" rx="33" ry="6.6" fill="none" stroke="#f4dd9a" stroke-width=".8" opacity=".55"/>
+      <circle cx="200" cy="327" r="3.4" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
+      <circle cx="200" cy="226" r="4.2" fill="#7a1626" stroke="#f4dd9a" stroke-width=".8"/>
+      <path class="shine" d="M240 166 C 241 196 233 218 220 230" stroke="rgba(255,238,204,.22)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
 
-    <div class="lilwrap mirror">
-      <svg class="lily" viewBox="0 0 220 430" aria-hidden="true">
-        <circle cx="113" cy="150" r="96" fill="url(#gGlow)"/>
-        <path d="M112 430 C 104 356 118 300 112 236 C 109 208 111 186 113 164" fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
-        <path d="M113 252 C 94 236 80 214 76 190" fill="none" stroke="url(#gStem)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M76 190 C 64 176 62 156 72 142 C 84 152 88 172 76 190 Z" fill="url(#gPetalB)" stroke="#a98d5f" stroke-width="1"/>
-        <path d="M72 142 C 74 152 75 160 76 170" stroke="#8a713f" stroke-width="1" fill="none" opacity=".6"/>
-        <path d="M110 356 C 68 348 40 318 30 278 C 72 288 102 320 110 356 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
-        <path d="M33 282 C 58 304 86 332 108 352" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
-        <path d="M113 300 C 155 292 183 262 193 222 C 151 232 121 264 113 300 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
-        <path d="M190 226 C 165 248 137 274 115 296" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
-        <g transform="translate(113 152) rotate(-6)">
+      <!-- ═ обвивание: листья поверх основания и лоза на ножке ═ -->
+      <path d="M116 334 C 158 356 214 358 252 340 C 214 330 160 326 116 334 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+      <path d="M120 336 C 160 344 210 348 248 340" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+      <path d="M284 356 C 246 372 190 374 152 360 C 192 350 248 348 284 356 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+      <path d="M280 357 C 242 362 194 366 156 360" stroke="#5c7546" stroke-width="1" fill="none" opacity=".4"/>
+      <g fill="none" stroke="#4c6238" stroke-width="3" stroke-linecap="round">
+        <path d="M188 252 C 208 258 212 270 194 277"/>
+        <path d="M212 299 C 192 305 189 315 206 321"/>
+      </g>
+      <path d="M212 268 C 224 264 232 270 230 279 C 228 286 221 286 220 280" fill="none" stroke="#4c6238" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M190 254 C 196 250 202 250 206 254 C 200 257 194 257 190 254 Z" fill="url(#gLeaf)"/>
+      <path d="M208 318 C 202 322 196 322 192 318 C 198 315 204 315 208 318 Z" fill="url(#gLeaf)"/>
+
+      <!-- ═ цветы, склонённые к краю бокала ═ -->
+      <g class="bloomWrap">
+        <g transform="translate(86 130) rotate(18) scale(.85)">
           <g fill="url(#gPetalB)" stroke="#a3875a" stroke-width="1">
             <use href="#petalL"/><use href="#petalL" transform="rotate(120)"/><use href="#petalL" transform="rotate(240)"/>
           </g>
@@ -433,8 +432,38 @@
             <ellipse cx="29" cy="-32" rx="5" ry="2.7" transform="rotate(50 29 -32)"/>
           </g>
         </g>
-      </svg>
-    </div>
+      </g>
+      <g class="bloomWrap bw2">
+        <g transform="translate(314 130) rotate(-18) scale(.85)">
+          <g fill="url(#gPetalB)" stroke="#a3875a" stroke-width="1">
+            <use href="#petalL"/><use href="#petalL" transform="rotate(120)"/><use href="#petalL" transform="rotate(240)"/>
+          </g>
+          <g fill="url(#gPetal)" stroke="#c3a26b" stroke-width="1">
+            <use href="#petalL" transform="rotate(60) scale(.92)"/>
+            <use href="#petalL" transform="rotate(180) scale(.92)"/>
+            <use href="#petalL" transform="rotate(300) scale(.92)"/>
+          </g>
+          <g stroke="#9c4a55" stroke-width="1.3" opacity=".5" fill="none" stroke-linecap="round">
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(60)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(180)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(300)"/>
+          </g>
+          <circle r="10" fill="#ead9a8"/><circle r="4.5" fill="#7a1626"/>
+          <g stroke="#e6cf95" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <path d="M0 0 C -8 -14 -17 -24 -27 -32"/><path d="M0 0 C -4 -16 -8 -30 -11 -42"/>
+            <path d="M0 0 C 1 -18 1 -34 -1 -48"/><path d="M0 0 C 6 -16 11 -28 15 -41"/>
+            <path d="M0 0 C 9 -13 19 -22 28 -30"/>
+          </g>
+          <g fill="#7a2030">
+            <ellipse cx="-28" cy="-34" rx="5" ry="2.7" transform="rotate(-50 -28 -34)"/>
+            <ellipse cx="-11.5" cy="-44" rx="5" ry="2.7" transform="rotate(-75 -11.5 -44)"/>
+            <ellipse cx="-1" cy="-50" rx="5" ry="2.7" transform="rotate(-90 -1 -50)"/>
+            <ellipse cx="16" cy="-43" rx="5" ry="2.7" transform="rotate(75 16 -43)"/>
+            <ellipse cx="29" cy="-32" rx="5" ry="2.7" transform="rotate(50 29 -32)"/>
+          </g>
+        </g>
+      </g>
+    </svg>
   </div>
 
   <div class="vow">
@@ -490,23 +519,44 @@
         back=document.getElementById('back'), petalsBox=document.getElementById('petals');
 
   /* убегающее «Нет» */
-  const replies=['Нет','Точно нет?','Подумайте ещё…','Вы уверены?','Молю, одумайтесь!','Судьба против…','…'];
-  let tries=0, gone=false;
+  const replies=['Точно нет?','Подумайте ещё…','Вы уверены?','Молю, одумайтесь!','Судьба против…','Кнопка тает…','…'];
+  let tries=0, gone=false, taunt=null, origin=null;
 
   function flee(){
     if(gone) return;
     tries++;
     const r=no.getBoundingClientRect();
-    if(getComputedStyle(no).position!=='fixed'){
+    if(!taunt){ /* первый побег: запоминаем исходное место */
+      origin={left:r.left, top:r.top, w:r.width, h:r.height};
       no.style.position='fixed';
       no.style.left=r.left+'px'; no.style.top=r.top+'px'; no.style.margin='0';
+      taunt=document.createElement('span');
+      taunt.className='taunt';
+      taunt.style.left=(origin.left+origin.w/2)+'px';
+      /* надпись проступает над прежним местом кнопки,
+         чтобы не задевать «Да» и саму кнопку */
+      taunt.style.top=(origin.top-32)+'px';
+      document.body.appendChild(taunt);
     }
-    const pad=12;
-    no.style.left=(pad+Math.random()*Math.max(innerWidth-r.width-pad*2,10))+'px';
-    no.style.top =(pad+Math.random()*Math.max(innerHeight-r.height-pad*2,10))+'px';
+    /* первый шажок — совсем робкий, дальше чуть смелее,
+       но всегда неподалёку от исходного места */
+    const first=tries===1;
+    const rx=first?36:96,   /* вбок   */
+          ry=first?34:104,  /* вверх/вниз */
+          minD=first?34:88; /* чтобы не прыгнуть в собственную тень */
+    let dx,dy,guard=0;
+    do{
+      dx=(Math.random()*2-1)*rx;
+      dy=(Math.random()*2-1)*ry;
+    }while(Math.hypot(dx,dy)<minD && ++guard<24);
+    const x=Math.min(Math.max(8,origin.left+dx), innerWidth-r.width-8);
+    const y=Math.min(Math.max(8,origin.top+dy), innerHeight-r.height-8);
+    no.style.left=x+'px';
+    no.style.top=y+'px';
     no.style.zIndex=40;
     no.style.transform='scale('+Math.max(1-tries*.06,.55)+')';
-    no.textContent=replies[Math.min(tries,replies.length-1)];
+    taunt.textContent=replies[Math.min(tries-1,replies.length-1)];
+    taunt.classList.remove('pop'); void taunt.offsetWidth; taunt.classList.add('pop');
     yes.style.setProperty('--s',Math.min(1+tries*.07,1.35).toFixed(2));
     if(tries>=7){
       gone=true;
