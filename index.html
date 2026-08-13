@@ -1,1 +1,554 @@
-gaz gaz
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>✦ Приглашение в театр</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🥀%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@500;700&family=Marck+Script&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --gold:#c9a45c; --gold-hi:#f0d998; --gold-dim:#8a6a3a;
+    --blood:#7a1626; --bone:#ead9bd; --bone-dim:#b9a88d;
+  }
+  body{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:52px 16px;overflow-x:hidden;
+    font-family:"Spectral",Georgia,serif;color:var(--bone);
+    background:
+      radial-gradient(1100px 700px at 50% -12%, #2c1424 0%, transparent 60%),
+      radial-gradient(900px 620px at 88% 112%, #1d0d18 0%, transparent 55%),
+      radial-gradient(700px 500px at 8% 90%, #160a14 0%, transparent 60%),
+      linear-gradient(#0c0810,#0a060d 55%,#0d0710);
+  }
+  /* виньетка */
+  body::before{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;
+    background:radial-gradient(120% 92% at 50% 42%, transparent 52%, rgba(0,0,0,.6) 100%);}
+  /* плёночное зерно */
+  body::after{content:"";position:fixed;inset:0;z-index:70;pointer-events:none;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  /* ── угольки ── */
+  .embers i{position:fixed;bottom:-14px;z-index:1;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle at 38% 32%, #ffe9ad, #cf8a3e 55%, transparent 78%);
+    animation:rise linear infinite;}
+  @keyframes rise{
+    0%{transform:translate(0,0);opacity:0}
+    10%{opacity:1}
+    85%{opacity:.6}
+    100%{transform:translate(var(--sway,24px),-108vh);opacity:0}}
+
+  /* ── свечи ── */
+  .candle{position:fixed;top:50%;transform:translateY(-52%);width:74px;z-index:1;opacity:.95}
+  .candle.l{left:3vw}.candle.r{right:3vw}
+  .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.7s ease-in-out infinite}
+  .candle.r .flame{animation-delay:-.9s}
+  .glow{animation:glowPulse 2.6s ease-in-out infinite}
+  @keyframes flick{
+    0%,100%{transform:scale(1) rotate(-1.6deg)}
+    22%{transform:scale(1.08,1.16) rotate(1.8deg)}
+    48%{transform:scale(.93,.88) rotate(-2.4deg)}
+    74%{transform:scale(1.04,1.08) rotate(2.2deg)}}
+  @keyframes glowPulse{0%,100%{opacity:.55}50%{opacity:.95}}
+  @media(max-width:1020px){.candle{display:none}}
+
+  /* ── карточка ── */
+  .card{position:relative;z-index:5;width:min(700px,100%);text-align:center;
+    background:linear-gradient(160deg,#1a1019 0%,#130b14 52%,#180d16 100%);
+    border:1px solid rgba(201,164,92,.42);
+    box-shadow:0 0 0 1px rgba(0,0,0,.85), 0 0 70px rgba(122,22,38,.22),
+      0 34px 90px rgba(0,0,0,.72), inset 0 0 90px rgba(0,0,0,.5);
+    padding:clamp(34px,6vw,58px) clamp(22px,6vw,62px) clamp(34px,5vw,50px);
+    animation:appear 1.3s cubic-bezier(.2,.8,.3,1) both;}
+  @keyframes appear{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
+  .card::before{content:"";position:absolute;inset:11px;border:1px solid rgba(201,164,92,.2);pointer-events:none}
+  .corner{position:absolute;width:58px;height:58px;pointer-events:none}
+  .c-tl{top:9px;left:9px}.c-tr{top:9px;right:9px;transform:rotate(90deg)}
+  .c-br{bottom:9px;right:9px;transform:rotate(180deg)}.c-bl{bottom:9px;left:9px;transform:rotate(270deg)}
+  .rose{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:min(300px,68vw);opacity:.13;pointer-events:none}
+
+  header{position:relative;z-index:1}
+  .kicker{font-family:"Cormorant Unicase",serif;font-weight:500;font-size:.78rem;
+    letter-spacing:.5em;text-indent:.5em;color:var(--gold);text-transform:uppercase}
+  .script{font-family:"Marck Script",cursive;color:var(--gold-hi);
+    font-size:clamp(1.5rem,4vw,2rem);margin-top:18px;text-shadow:0 0 18px rgba(240,217,152,.25)}
+  h1{font-family:"Cormorant Unicase",serif;font-weight:700;
+    font-size:clamp(1.85rem,5.4vw,3.05rem);line-height:1.14;margin:.3em 0 .1em;
+    background:linear-gradient(180deg,#f7e7bb 8%,#d8b872 46%,#c9a45c 62%,#8f6b2e 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 2px 14px rgba(201,164,92,.18));}
+  .lede{font-weight:300;font-style:italic;color:var(--bone);
+    font-size:clamp(1rem,2.5vw,1.14rem);line-height:1.8;max-width:46ch;margin:16px auto 0}
+
+  .orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:26px auto 4px;color:var(--gold)}
+  .orn::before,.orn::after{content:"";height:1px;width:min(130px,24vw)}
+  .orn::before{background:linear-gradient(90deg,transparent,var(--gold))}
+  .orn::after{background:linear-gradient(90deg,var(--gold),transparent)}
+
+  .details{list-style:none;margin:22px auto 0;display:grid;gap:11px;justify-items:center;font-size:1.03rem}
+  .details li{display:flex;gap:14px;align-items:baseline;color:var(--bone-dim)}
+  .details .rn{font-family:"Cormorant Unicase",serif;color:var(--gold);min-width:2.1em;text-align:right;letter-spacing:.08em}
+  .details b{font-weight:400;font-style:italic;color:var(--bone)}
+
+  /* ── лилии и вино ── */
+  .figures{display:flex;align-items:flex-end;justify-content:center;gap:clamp(6px,3vw,28px);margin:30px auto 4px}
+  .lilwrap{line-height:0}
+  .mirror{transform:scaleX(-1)}
+  .lily{width:clamp(82px,19vw,126px);transform-origin:50% 100%;
+    animation:sway 7.5s ease-in-out infinite alternate;filter:drop-shadow(0 12px 18px rgba(0,0,0,.55))}
+  .mirror .lily{animation-delay:-3.7s}
+  .chalice{width:clamp(96px,22vw,142px);filter:drop-shadow(0 14px 22px rgba(0,0,0,.6))}
+  @keyframes sway{from{transform:rotate(-2deg)}to{transform:rotate(2.2deg)}}
+  .shine{animation:shimmer 5.5s ease-in-out infinite}
+  @keyframes shimmer{0%,100%{opacity:.2}50%{opacity:.65}}
+  .bubble{animation:bubble 4.2s ease-in infinite}
+  .bubble.b2{animation-delay:1.4s}.bubble.b3{animation-delay:2.6s}
+  @keyframes bubble{0%{transform:translateY(0);opacity:0}12%{opacity:.85}100%{transform:translateY(-40px);opacity:0}}
+
+  /* ── кнопки ── */
+  .vow{margin-top:32px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+  .btn{font-family:"Cormorant Unicase",serif;font-weight:700;font-size:1.12rem;letter-spacing:.14em;
+    min-width:138px;padding:.8em 2.2em;color:var(--bone);cursor:pointer;position:relative;z-index:0;
+    background:none;border:none;filter:drop-shadow(0 4px 12px rgba(0,0,0,.55));
+    transition:filter .3s,transform .25s;}
+  .btn::before,.btn::after{content:"";position:absolute;inset:0;z-index:-1;
+    clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);}
+  .btn::before{background:var(--gold-dim);z-index:-2}
+  .btn::after{inset:1.5px;background:linear-gradient(180deg,#241318,#150a10)}
+  .btn:hover::before{background:var(--gold)}
+  .btn:focus-visible{outline:1px solid var(--gold-hi);outline-offset:4px}
+  .btn-yes::before{background:var(--gold)}
+  .btn-yes::after{background:linear-gradient(180deg,#6b1428,#38091a)}
+  .btn-yes{transform:scale(var(--s,1));filter:drop-shadow(0 4px 16px rgba(160,32,48,.45))}
+  .btn-yes:hover{transform:translateY(-2px) scale(calc(var(--s,1)*1.03));
+    filter:drop-shadow(0 6px 24px rgba(201,90,90,.55))}
+  .btn-no:hover::after{background:linear-gradient(180deg,#2c1820,#1a0e14)}
+  .vanish{opacity:0!important;transform:scale(.15) rotate(30deg)!important;
+    transition:opacity 1s,transform 1s!important}
+  .hint{margin-top:16px;font-style:italic;font-size:.95rem;color:var(--gold-dim);
+    opacity:0;transition:opacity 1.2s;min-height:1.3em}
+  .hint.show{opacity:.95}
+  .sig{margin-top:30px;font-family:"Marck Script",cursive;color:var(--gold-hi);
+    font-size:1.3rem;line-height:1.55;text-shadow:0 0 16px rgba(240,217,152,.2)}
+
+  /* ── финальная вуаль ── */
+  .veil{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;
+    background:radial-gradient(900px 640px at 50% 36%, rgba(64,16,32,.5), rgba(5,2,7,.95) 78%);
+    backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .9s ease}
+  .veil.show{opacity:1;pointer-events:auto}
+  .sealed{position:relative;max-width:560px;width:100%;text-align:center;
+    padding:clamp(30px,6vw,52px) clamp(22px,5vw,46px);
+    background:linear-gradient(170deg,rgba(28,16,26,.96),rgba(15,8,14,.97));
+    border:1px solid rgba(201,164,92,.45);
+    box-shadow:0 0 80px rgba(122,22,38,.3),0 40px 90px rgba(0,0,0,.8), inset 0 0 60px rgba(0,0,0,.5);
+    transform:scale(.93) translateY(14px);transition:transform .9s cubic-bezier(.2,.9,.3,1)}
+  .veil.show .sealed{transform:none}
+  .sealed::before{content:"";position:absolute;inset:9px;border:1px solid rgba(201,164,92,.2);pointer-events:none}
+  .seal{width:92px;margin-bottom:14px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.65));
+    animation:stamp .8s cubic-bezier(.2,1.7,.4,1) both .25s}
+  @keyframes stamp{from{transform:scale(2.4) rotate(-18deg);opacity:0}to{transform:scale(1) rotate(-5deg);opacity:1}}
+  .sealed h2{font-family:"Cormorant Unicase",serif;font-weight:700;font-size:clamp(1.8rem,5vw,2.6rem);
+    background:linear-gradient(180deg,#f7e7bb,#c9a45c 60%,#8f6b2e);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .when{margin-top:20px;font-family:"Cormorant Unicase",serif;letter-spacing:.12em;color:var(--gold);font-size:1rem}
+  .back{margin-top:26px;background:none;border:none;color:var(--bone-dim);
+    font-family:"Spectral",serif;font-style:italic;font-size:.92rem;cursor:pointer;
+    border-bottom:1px dotted var(--gold-dim);padding-bottom:2px;transition:color .3s}
+  .back:hover{color:var(--gold-hi)}
+
+  /* ── лепестки ── */
+  #petals{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
+  .petal{position:absolute;top:-34px;animation:fall linear forwards}
+  @keyframes fall{
+    0%{transform:translate(0,-4vh) rotate(0deg)}
+    50%{transform:translate(var(--sx,26px),52vh) rotate(330deg)}
+    100%{transform:translate(calc(var(--sx,26px)*-.6),110vh) rotate(680deg)}}
+
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ═══ Общие SVG-определения (градиенты, лепестки, орнаменты) ═══ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <path id="petalL" d="M0 0 C 16 -16 23 -52 11 -90 C 6 -105 -6 -105 -11 -90 C -23 -52 -16 -16 0 0 Z"/>
+    <linearGradient id="gPetal" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#cbb287"/><stop offset=".45" stop-color="#fbf3e2"/><stop offset="1" stop-color="#ecd3ab"/>
+    </linearGradient>
+    <linearGradient id="gPetalB" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#a8905f"/><stop offset=".5" stop-color="#e4d4ae"/><stop offset="1" stop-color="#cdb183"/>
+    </linearGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#456032"/><stop offset="1" stop-color="#1e2b17"/>
+    </linearGradient>
+    <linearGradient id="gStem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4c6238"/><stop offset="1" stop-color="#28371d"/>
+    </linearGradient>
+    <radialGradient id="gGlow">
+      <stop offset="0" stop-color="#ffd98a" stop-opacity=".32"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4dd9a"/><stop offset=".45" stop-color="#b8873b"/>
+      <stop offset=".62" stop-color="#7a5a20"/><stop offset="1" stop-color="#d9b46a"/>
+    </linearGradient>
+    <radialGradient id="gWine" cx=".5" cy=".3" r="1">
+      <stop offset="0" stop-color="#b32843"/><stop offset=".55" stop-color="#711228"/><stop offset="1" stop-color="#3a0714"/>
+    </radialGradient>
+    <linearGradient id="gGlass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b161e"/><stop offset="1" stop-color="#120a10"/>
+    </linearGradient>
+    <radialGradient id="gWax" cx=".38" cy=".32" r=".9">
+      <stop offset="0" stop-color="#b32843"/><stop offset=".65" stop-color="#7a1626"/><stop offset="1" stop-color="#4a0c18"/>
+    </radialGradient>
+    <linearGradient id="gFlame" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#fff3c4"/><stop offset=".5" stop-color="#ffc25e"/>
+      <stop offset="1" stop-color="#ff8330" stop-opacity=".15"/>
+    </linearGradient>
+    <radialGradient id="gFlameGlow">
+      <stop offset="0" stop-color="#ffb54f" stop-opacity=".5"/><stop offset="1" stop-color="#ffb54f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gWaxC" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#cdbb96"/><stop offset=".4" stop-color="#f3e7cd"/><stop offset="1" stop-color="#b8a67f"/>
+    </linearGradient>
+    <path id="roseP" d="M100 16 C 107 34 107 52 100 66 C 93 52 93 34 100 16 Z"/>
+    <g id="fleur">
+      <path d="M0 -30 C 6 -20 7 -9 0 2 C -7 -9 -6 -20 0 -30 Z"/>
+      <path d="M0 7 C 3 12 3 18 0 24 C -3 18 -3 12 0 7 Z"/>
+      <path d="M-4 -5 C -12 -16 -24 -13 -24 -5 C -24 2 -16 5 -8 1 C -6 0 -5 -2 -4 -5 Z"/>
+      <path d="M4 -5 C 12 -16 24 -13 24 -5 C 24 2 16 5 8 1 C 6 0 5 -2 4 -5 Z"/>
+      <rect x="-11" y="2" width="22" height="4.6" rx="1.4"/>
+    </g>
+    <g id="cornerOrn" fill="none" stroke="#c9a45c">
+      <path d="M3 77 V24 Q3 3 24 3 H77" stroke-width="2"/>
+      <path d="M11 77 V32 Q11 11 32 11 H77" stroke-width="1" opacity=".55"/>
+      <path d="M3 44 C 20 40 34 26 38 9" stroke-width="1.3"/>
+      <circle cx="38" cy="8" r="2.1" fill="#c9a45c" stroke="none"/>
+      <path d="M44 3 C 40 20 26 34 9 38" stroke-width="1.3"/>
+      <circle cx="8" cy="38" r="2.1" fill="#c9a45c" stroke="none"/>
+      <rect x="17" y="17" width="6.4" height="6.4" transform="rotate(45 20.2 20.2)" fill="#c9a45c" stroke="none"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="embers" id="embers"></div>
+
+<!-- ═══ Свечи по бокам ═══ -->
+<div class="candle l" aria-hidden="true">
+  <svg viewBox="0 0 120 260">
+    <ellipse cx="60" cy="247" rx="34" ry="8" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1.4"/>
+    <ellipse cx="60" cy="243" rx="23" ry="4.6" fill="#3a2a10"/>
+    <path d="M43 150 L43 234 C43 240 50 243 60 243 C70 243 77 240 77 234 L77 150 Z" fill="url(#gWaxC)" stroke="#a89877" stroke-width=".8"/>
+    <path d="M46 152 C 45 166 47 172 44 181 C 42 187 46 189 47 183 C 49 173 48 162 49 154 Z" fill="#f3e7cd"/>
+    <path d="M74 152 C 75 162 73 171 75 177 C 77 182 73 184 72 178 C 71 170 72 160 71 154 Z" fill="#e8d8b6"/>
+    <ellipse cx="60" cy="150" rx="17" ry="5" fill="#f6ecd8"/>
+    <ellipse cx="60" cy="150" rx="10.5" ry="3" fill="#e0cda5"/>
+    <path d="M60 148 C 61 143 60 140 58 135" stroke="#3a2a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <circle class="glow" cx="60" cy="116" r="34" fill="url(#gFlameGlow)"/>
+    <g class="flame">
+      <path d="M60 138 C 68 126 69 112 60 96 C 51 112 52 126 60 138 Z" fill="url(#gFlame)"/>
+      <path d="M60 134 C 64 127 64.5 118 60 108 C 55.5 118 56 127 60 134 Z" fill="#fff6d8" opacity=".85"/>
+    </g>
+  </svg>
+</div>
+<div class="candle r" aria-hidden="true">
+  <svg viewBox="0 0 120 260">
+    <ellipse cx="60" cy="247" rx="34" ry="8" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1.4"/>
+    <ellipse cx="60" cy="243" rx="23" ry="4.6" fill="#3a2a10"/>
+    <path d="M43 150 L43 234 C43 240 50 243 60 243 C70 243 77 240 77 234 L77 150 Z" fill="url(#gWaxC)" stroke="#a89877" stroke-width=".8"/>
+    <path d="M46 152 C 45 166 47 172 44 181 C 42 187 46 189 47 183 C 49 173 48 162 49 154 Z" fill="#f3e7cd"/>
+    <path d="M74 152 C 75 162 73 171 75 177 C 77 182 73 184 72 178 C 71 170 72 160 71 154 Z" fill="#e8d8b6"/>
+    <ellipse cx="60" cy="150" rx="17" ry="5" fill="#f6ecd8"/>
+    <ellipse cx="60" cy="150" rx="10.5" ry="3" fill="#e0cda5"/>
+    <path d="M60 148 C 61 143 60 140 58 135" stroke="#3a2a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <circle class="glow" cx="60" cy="116" r="34" fill="url(#gFlameGlow)"/>
+    <g class="flame">
+      <path d="M60 138 C 68 126 69 112 60 96 C 51 112 52 126 60 138 Z" fill="url(#gFlame)"/>
+      <path d="M60 134 C 64 127 64.5 118 60 108 C 55.5 118 56 127 60 134 Z" fill="#fff6d8" opacity=".85"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ═══ Приглашение ═══ -->
+<main class="card">
+  <svg class="rose" viewBox="0 0 200 200" aria-hidden="true">
+    <g fill="none" stroke="#c9a45c">
+      <circle cx="100" cy="100" r="94" stroke-width="1.6"/>
+      <circle cx="100" cy="100" r="70" stroke-width="1"/>
+      <circle cx="100" cy="100" r="30" stroke-width="1"/>
+      <circle cx="100" cy="100" r="12" fill="#c9a45c" fill-opacity=".22"/>
+    </g>
+    <g fill="#c9a45c" fill-opacity=".3">
+      <use href="#roseP"/><use href="#roseP" transform="rotate(30 100 100)"/>
+      <use href="#roseP" transform="rotate(60 100 100)"/><use href="#roseP" transform="rotate(90 100 100)"/>
+      <use href="#roseP" transform="rotate(120 100 100)"/><use href="#roseP" transform="rotate(150 100 100)"/>
+      <use href="#roseP" transform="rotate(180 100 100)"/><use href="#roseP" transform="rotate(210 100 100)"/>
+      <use href="#roseP" transform="rotate(240 100 100)"/><use href="#roseP" transform="rotate(270 100 100)"/>
+      <use href="#roseP" transform="rotate(300 100 100)"/><use href="#roseP" transform="rotate(330 100 100)"/>
+    </g>
+    <g fill="none" stroke="#c9a45c" stroke-width="1">
+      <circle cx="100" cy="20" r="6"/><circle cx="100" cy="20" r="6" transform="rotate(30 100 100)"/>
+      <circle cx="100" cy="20" r="6" transform="rotate(60 100 100)"/><circle cx="100" cy="20" r="6" transform="rotate(90 100 100)"/>
+      <circle cx="100" cy="20" r="6" transform="rotate(120 100 100)"/><circle cx="100" cy="20" r="6" transform="rotate(150 100 100)"/>
+      <circle cx="100" cy="20" r="6" transform="rotate(180 100 100)"/><circle cx="100" cy="20" r="6" transform="rotate(210 100 100)"/>
+      <circle cx="100" cy="20" r="6" transform="rotate(240 100 100)"/><circle cx="100" cy="20" r="6" transform="rotate(270 100 100)"/>
+      <circle cx="100" cy="20" r="6" transform="rotate(300 100 100)"/><circle cx="100" cy="20" r="6" transform="rotate(330 100 100)"/>
+    </g>
+  </svg>
+
+  <svg class="corner c-tl" viewBox="0 0 80 80" aria-hidden="true"><use href="#cornerOrn"/></svg>
+  <svg class="corner c-tr" viewBox="0 0 80 80" aria-hidden="true"><use href="#cornerOrn"/></svg>
+  <svg class="corner c-br" viewBox="0 0 80 80" aria-hidden="true"><use href="#cornerOrn"/></svg>
+  <svg class="corner c-bl" viewBox="0 0 80 80" aria-hidden="true"><use href="#cornerOrn"/></svg>
+
+  <header>
+    <div class="kicker">✦ &nbsp;приглашение&nbsp; ✦</div>
+    <p class="script">Найя…</p>
+    <h1>Позвольте пригласить Вас в&nbsp;театр</h1>
+  </header>
+
+  <p class="lede">Когда гаснет свет в зале и вздрагивает занавес, мир на несколько часов
+    перестаёт существовать. Я хочу, чтобы в этот вечер он перестал существовать — для нас двоих.</p>
+
+  <div class="orn">
+    <svg viewBox="-30 -34 60 62" width="32" aria-hidden="true"><use href="#fleur" fill="#c9a45c"/></svg>
+  </div>
+
+  <!-- ✎ Замените дату, время и место на свои -->
+  <ul class="details">
+    <li><span class="rn">I</span><span>Когда — <b>пятница, 19:00</b></span></li>
+    <li><span class="rn">II</span><span>Где — <b>Театр оперы и балета</b></span></li>
+    <li><span class="rn">III</span><span>После — <b>вино при свечах и лунная прогулка</b></span></li>
+  </ul>
+
+  <!-- ═══ Лилии и вино ═══ -->
+  <div class="figures">
+    <div class="lilwrap">
+      <svg class="lily" viewBox="0 0 220 430" aria-hidden="true">
+        <circle cx="113" cy="150" r="96" fill="url(#gGlow)"/>
+        <path d="M112 430 C 104 356 118 300 112 236 C 109 208 111 186 113 164" fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M113 252 C 94 236 80 214 76 190" fill="none" stroke="url(#gStem)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M76 190 C 64 176 62 156 72 142 C 84 152 88 172 76 190 Z" fill="url(#gPetalB)" stroke="#a98d5f" stroke-width="1"/>
+        <path d="M72 142 C 74 152 75 160 76 170" stroke="#8a713f" stroke-width="1" fill="none" opacity=".6"/>
+        <path d="M110 356 C 68 348 40 318 30 278 C 72 288 102 320 110 356 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+        <path d="M33 282 C 58 304 86 332 108 352" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+        <path d="M113 300 C 155 292 183 262 193 222 C 151 232 121 264 113 300 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+        <path d="M190 226 C 165 248 137 274 115 296" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+        <g transform="translate(113 152) rotate(-6)">
+          <g fill="url(#gPetalB)" stroke="#a3875a" stroke-width="1">
+            <use href="#petalL"/><use href="#petalL" transform="rotate(120)"/><use href="#petalL" transform="rotate(240)"/>
+          </g>
+          <g fill="url(#gPetal)" stroke="#c3a26b" stroke-width="1">
+            <use href="#petalL" transform="rotate(60) scale(.92)"/>
+            <use href="#petalL" transform="rotate(180) scale(.92)"/>
+            <use href="#petalL" transform="rotate(300) scale(.92)"/>
+          </g>
+          <g stroke="#9c4a55" stroke-width="1.3" opacity=".5" fill="none" stroke-linecap="round">
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(60)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(180)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(300)"/>
+          </g>
+          <circle r="10" fill="#ead9a8"/><circle r="4.5" fill="#7a1626"/>
+          <g stroke="#e6cf95" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <path d="M0 0 C -8 -14 -17 -24 -27 -32"/><path d="M0 0 C -4 -16 -8 -30 -11 -42"/>
+            <path d="M0 0 C 1 -18 1 -34 -1 -48"/><path d="M0 0 C 6 -16 11 -28 15 -41"/>
+            <path d="M0 0 C 9 -13 19 -22 28 -30"/>
+          </g>
+          <g fill="#7a2030">
+            <ellipse cx="-28" cy="-34" rx="5" ry="2.7" transform="rotate(-50 -28 -34)"/>
+            <ellipse cx="-11.5" cy="-44" rx="5" ry="2.7" transform="rotate(-75 -11.5 -44)"/>
+            <ellipse cx="-1" cy="-50" rx="5" ry="2.7" transform="rotate(-90 -1 -50)"/>
+            <ellipse cx="16" cy="-43" rx="5" ry="2.7" transform="rotate(75 16 -43)"/>
+            <ellipse cx="29" cy="-32" rx="5" ry="2.7" transform="rotate(50 29 -32)"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <svg class="chalice" viewBox="0 0 200 250" aria-hidden="true">
+      <ellipse cx="100" cy="238" rx="62" ry="8" fill="#000" opacity=".5"/>
+      <path d="M40 44 C 40 102 64 136 100 140 C 136 136 160 102 160 44 Z" fill="url(#gGlass)" stroke="url(#gGold)" stroke-width="3"/>
+      <clipPath id="bowlClip"><path d="M43 47 C 43 100 66 132 100 136 C 134 132 157 100 157 47 Z"/></clipPath>
+      <g clip-path="url(#bowlClip)">
+        <rect x="40" y="86" width="120" height="60" fill="url(#gWine)"/>
+        <ellipse cx="100" cy="86" rx="58" ry="9" fill="#a3243c"/>
+        <ellipse cx="100" cy="85" rx="44" ry="6" fill="#c23350" opacity=".55"/>
+        <circle class="bubble" cx="88" cy="126" r="2.4" fill="#e8b7c0" opacity=".7"/>
+        <circle class="bubble b2" cx="106" cy="130" r="1.8" fill="#e8b7c0" opacity=".6"/>
+        <circle class="bubble b3" cx="118" cy="124" r="2.8" fill="#e8b7c0" opacity=".5"/>
+        <path class="shine" d="M60 62 C 62 94 72 116 86 126" stroke="rgba(255,238,204,.5)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      </g>
+      <ellipse cx="100" cy="44" rx="60" ry="11" fill="rgba(255,240,210,.05)" stroke="url(#gGold)" stroke-width="3"/>
+      <ellipse cx="100" cy="44" rx="54" ry="8.6" fill="none" stroke="#f4dd9a" stroke-width=".7" opacity=".5"/>
+      <path d="M92 140 C 94 158 96 168 100 176 C 104 168 106 158 108 140 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <circle cx="100" cy="183" r="9" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <circle cx="100" cy="183" r="3.1" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
+      <path d="M96 192 C 96 202 92 211 85 218 L115 218 C 108 211 104 202 104 192 Z" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1"/>
+      <ellipse cx="100" cy="221" rx="47" ry="11" fill="url(#gGold)" stroke="#6d4f1c" stroke-width="1.4"/>
+      <ellipse cx="100" cy="218" rx="33" ry="6.6" fill="none" stroke="#f4dd9a" stroke-width=".8" opacity=".55"/>
+      <circle cx="100" cy="221" r="3.4" fill="#7a1626" stroke="#f4dd9a" stroke-width=".6"/>
+      <circle cx="100" cy="120" r="4.2" fill="#7a1626" stroke="#f4dd9a" stroke-width=".8"/>
+      <path class="shine" d="M140 60 C 141 90 133 112 120 124" stroke="rgba(255,238,204,.22)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <div class="lilwrap mirror">
+      <svg class="lily" viewBox="0 0 220 430" aria-hidden="true">
+        <circle cx="113" cy="150" r="96" fill="url(#gGlow)"/>
+        <path d="M112 430 C 104 356 118 300 112 236 C 109 208 111 186 113 164" fill="none" stroke="url(#gStem)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M113 252 C 94 236 80 214 76 190" fill="none" stroke="url(#gStem)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M76 190 C 64 176 62 156 72 142 C 84 152 88 172 76 190 Z" fill="url(#gPetalB)" stroke="#a98d5f" stroke-width="1"/>
+        <path d="M72 142 C 74 152 75 160 76 170" stroke="#8a713f" stroke-width="1" fill="none" opacity=".6"/>
+        <path d="M110 356 C 68 348 40 318 30 278 C 72 288 102 320 110 356 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+        <path d="M33 282 C 58 304 86 332 108 352" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+        <path d="M113 300 C 155 292 183 262 193 222 C 151 232 121 264 113 300 Z" fill="url(#gLeaf)" stroke="#141f10" stroke-width="1"/>
+        <path d="M190 226 C 165 248 137 274 115 296" stroke="#5c7546" stroke-width="1" fill="none" opacity=".5"/>
+        <g transform="translate(113 152) rotate(-6)">
+          <g fill="url(#gPetalB)" stroke="#a3875a" stroke-width="1">
+            <use href="#petalL"/><use href="#petalL" transform="rotate(120)"/><use href="#petalL" transform="rotate(240)"/>
+          </g>
+          <g fill="url(#gPetal)" stroke="#c3a26b" stroke-width="1">
+            <use href="#petalL" transform="rotate(60) scale(.92)"/>
+            <use href="#petalL" transform="rotate(180) scale(.92)"/>
+            <use href="#petalL" transform="rotate(300) scale(.92)"/>
+          </g>
+          <g stroke="#9c4a55" stroke-width="1.3" opacity=".5" fill="none" stroke-linecap="round">
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(60)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(180)"/>
+            <path d="M0 -12 C 2 -30 2 -50 0 -66" transform="rotate(300)"/>
+          </g>
+          <circle r="10" fill="#ead9a8"/><circle r="4.5" fill="#7a1626"/>
+          <g stroke="#e6cf95" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <path d="M0 0 C -8 -14 -17 -24 -27 -32"/><path d="M0 0 C -4 -16 -8 -30 -11 -42"/>
+            <path d="M0 0 C 1 -18 1 -34 -1 -48"/><path d="M0 0 C 6 -16 11 -28 15 -41"/>
+            <path d="M0 0 C 9 -13 19 -22 28 -30"/>
+          </g>
+          <g fill="#7a2030">
+            <ellipse cx="-28" cy="-34" rx="5" ry="2.7" transform="rotate(-50 -28 -34)"/>
+            <ellipse cx="-11.5" cy="-44" rx="5" ry="2.7" transform="rotate(-75 -11.5 -44)"/>
+            <ellipse cx="-1" cy="-50" rx="5" ry="2.7" transform="rotate(-90 -1 -50)"/>
+            <ellipse cx="16" cy="-43" rx="5" ry="2.7" transform="rotate(75 16 -43)"/>
+            <ellipse cx="29" cy="-32" rx="5" ry="2.7" transform="rotate(50 29 -32)"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="vow">
+    <button class="btn btn-yes" id="yes">Да</button>
+    <button class="btn btn-no" id="no">Нет</button>
+  </div>
+  <p class="hint" id="hint">Кнопка «Нет» растворилась во тьме… остался лишь верный путь.</p>
+
+  <!-- ✎ Подпись можно поменять под себя -->
+  <p class="sig">С трепетом жду Вашего слова…<br>— Ваш покорный слуга</p>
+</main>
+
+<div id="petals"></div>
+
+<!-- ═══ Финал после «Да» ═══ -->
+<div class="veil" id="veil">
+  <div class="sealed">
+    <svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="17" cy="74" r="6.5" fill="url(#gWax)"/>
+      <circle cx="104" cy="49" r="5" fill="url(#gWax)"/>
+      <circle cx="96" cy="98" r="4" fill="url(#gWax)"/>
+      <circle cx="60" cy="60" r="45" fill="url(#gWax)" stroke="#3f0a14" stroke-width="3"/>
+      <circle cx="60" cy="60" r="37" fill="none" stroke="rgba(244,221,154,.45)" stroke-width="1.3" stroke-dasharray="3 4"/>
+      <use href="#fleur" transform="translate(60 63) scale(1.2)" fill="rgba(244,221,154,.9)"/>
+    </svg>
+    <h2>Да будет так!</h2>
+    <p class="script">…и занавес поднимется для нас двоих</p>
+    <p class="lede">Вы осчастливили меня. Ложа уже ждёт, лилии стоят в хрустале,
+      а вино дышит в графине. Приходите — и этот вечер станет легендой.</p>
+    <!-- ✎ Та же дата и место, что и выше -->
+    <p class="when">Пятница · 19:00 · Театр оперы и балета</p>
+    <button class="back" id="back">◂ вернуться к приглашению</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* угольки */
+  const embers = document.getElementById('embers');
+  for(let i=0;i<24;i++){
+    const s=document.createElement('i');
+    const sz=(2+Math.random()*3.5).toFixed(1);
+    s.style.left=(Math.random()*100)+'%';
+    s.style.width=sz+'px'; s.style.height=sz+'px';
+    s.style.animationDuration=(7+Math.random()*9).toFixed(1)+'s';
+    s.style.animationDelay=(-Math.random()*16).toFixed(1)+'s';
+    s.style.setProperty('--sway',(Math.random()*90-45).toFixed(0)+'px');
+    embers.appendChild(s);
+  }
+
+  const yes=document.getElementById('yes'), no=document.getElementById('no'),
+        hint=document.getElementById('hint'), veil=document.getElementById('veil'),
+        back=document.getElementById('back'), petalsBox=document.getElementById('petals');
+
+  /* убегающее «Нет» */
+  const replies=['Нет','Точно нет?','Подумайте ещё…','Вы уверены?','Молю, одумайтесь!','Судьба против…','…'];
+  let tries=0, gone=false;
+
+  function flee(){
+    if(gone) return;
+    tries++;
+    const r=no.getBoundingClientRect();
+    if(getComputedStyle(no).position!=='fixed'){
+      no.style.position='fixed';
+      no.style.left=r.left+'px'; no.style.top=r.top+'px'; no.style.margin='0';
+    }
+    const pad=12;
+    no.style.left=(pad+Math.random()*Math.max(innerWidth-r.width-pad*2,10))+'px';
+    no.style.top =(pad+Math.random()*Math.max(innerHeight-r.height-pad*2,10))+'px';
+    no.style.zIndex=40;
+    no.style.transform='scale('+Math.max(1-tries*.06,.55)+')';
+    no.textContent=replies[Math.min(tries,replies.length-1)];
+    yes.style.setProperty('--s',Math.min(1+tries*.07,1.35).toFixed(2));
+    if(tries>=7){
+      gone=true;
+      setTimeout(()=>{
+        no.classList.add('vanish');
+        setTimeout(()=>no.style.display='none',1200);
+        hint.classList.add('show');
+      },350);
+    }
+  }
+  no.addEventListener('mouseenter',flee);
+  no.addEventListener('touchstart',e=>{e.preventDefault();flee();},{passive:false});
+  no.addEventListener('click',e=>{e.preventDefault();flee();});
+  no.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flee();}});
+
+  /* дождь из лепестков */
+  const colors=['#8e1f2f','#c9a45c','#f3e6d0','#5e1224','#a72540'];
+  function petalRain(n){
+    for(let i=0;i<n;i++){
+      const p=document.createElement('span');
+      p.className='petal';
+      const s=(9+Math.random()*11).toFixed(0);
+      p.style.left=(Math.random()*100)+'vw';
+      p.style.width=s+'px'; p.style.height=(s*1.25)+'px';
+      p.style.animationDuration=(4.5+Math.random()*5).toFixed(2)+'s';
+      p.style.animationDelay=(Math.random()*2.6).toFixed(2)+'s';
+      p.style.setProperty('--sx',(Math.random()*90-45).toFixed(0)+'px');
+      const c=colors[(Math.random()*colors.length)|0];
+      p.innerHTML='<svg viewBox="-12 -14 24 30" width="100%" height="100%">'
+        +'<path d="M0 -13 C 9 -7 11 2 6 10 C 1 16 -8 14 -10 6 C -12 -2 -7 -9 0 -13 Z" fill="'+c+'" opacity=".9"/></svg>';
+      petalsBox.appendChild(p);
+      setTimeout(()=>p.remove(),11000);
+    }
+  }
+
+  yes.addEventListener('click',()=>{
+    veil.classList.add('show');
+    petalRain(70);
+    setTimeout(()=>petalRain(36),2400);
+  });
+  back.addEventListener('click',()=>veil.classList.remove('show'));
+})();
+</script>
+</body>
+</html>
